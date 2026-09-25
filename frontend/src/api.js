@@ -1,0 +1,26 @@
+import axios from 'axios';
+
+const api = axios.create({ baseURL: '/api' });
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+export function getUser() {
+  const raw = localStorage.getItem('user');
+  return raw ? JSON.parse(raw) : null;
+}
+
+export function setSession(token, user) {
+  localStorage.setItem('token', token);
+  localStorage.setItem('user', JSON.stringify(user));
+}
+
+export function clearSession() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+}
+
+export default api;
